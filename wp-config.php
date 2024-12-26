@@ -90,6 +90,7 @@ define('WP_REST_API_DISABLED', false);
 define('FS_METHOD', 'direct');
 define('GRAPHQL_DEBUG', true);
 /* Add any custom values between this line and the "stop editing" line. */
+define('JWT_AUTH_SECRET_KEY', 'IwLGfDIpmfx3^$&2JX+zu gF|$76I<1@k?Q|[Y33I)j>cO}c/c^&U1Y<rr`yvq@5');
 
 
 
