@@ -156,3 +156,54 @@ if ( ! function_exists( 'twentytwentyfive_format_binding' ) ) :
 		}
 	}
 endif;
+
+
+function wcfm_add_vendor_to_product($product_id, $vendor_id) {
+    $linked_vendors = get_post_meta($product_id, '_wcfm_linked_vendors', true);
+    
+    if (empty($linked_vendors)) {
+        $linked_vendors = array();
+    }
+    
+    if (!in_array($vendor_id, $linked_vendors)) {
+        $linked_vendors[] = $vendor_id;
+        update_post_meta($product_id, '_wcfm_linked_vendors', $linked_vendors);
+    }
+}
+
+add_action('wcfm_product_save', 'wcfm_save_linked_vendor_product', 10, 2);
+function wcfm_save_linked_vendor_product($product_id, $data) {
+    $vendor_id = get_current_user_id();
+    $selected_product_id = isset($_POST['product_id']) ? intval($_POST['product_id']) : 0;
+
+    if ($selected_product_id > 0) {
+        // Associa il venditore al prodotto esistente
+        wcfm_add_vendor_to_product($selected_product_id, $vendor_id);
+        
+        // Salva le informazioni specifiche del venditore (prezzo, stock)
+        if (isset($_POST['vendor_price'])) {
+            update_post_meta($selected_product_id, '_vendor_price_' . $vendor_id, sanitize_text_field($_POST['vendor_price']));
+        }
+        if (isset($_POST['vendor_stock'])) {
+            update_post_meta($selected_product_id, '_vendor_stock_' . $vendor_id, sanitize_text_field($_POST['vendor_stock']));
+        }
+    }
+}
+
+add_filter( 'wcfm_products_args', 'wcfm_filter_vendor_products', 100 );
+function wcfm_filter_vendor_products( $args ) {
+    $vendor_id = get_current_user_id();
+
+   
+
+    return $args;
+}
+
+function add_customer_id_to_response($response, $user) {
+    if (class_exists('WC_Customer')) {
+        $customer = new WC_Customer($user->ID);
+        $response['customer_id'] = $customer->get_id();
+    }
+    return $response;
+}
+add_filter('jwt_auth_token_before_dispatch', 'add_customer_id_to_response', 10, 2);

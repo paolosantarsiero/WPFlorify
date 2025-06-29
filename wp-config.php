@@ -85,10 +85,11 @@ $table_prefix = 'wp_';
  *
  * @link https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/
  */
-define( 'WP_DEBUG', false );
-define('WP_REST_API_DISABLED', false);
-define('FS_METHOD', 'direct');
-define('GRAPHQL_DEBUG', true);
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
+define('WP_ERROR_LOG', true);
+define('WP_DEBUG_DISPLAY', false);
+@ini_set('display_errors', 0);
 /* Add any custom values between this line and the "stop editing" line. */
 define('JWT_AUTH_SECRET_KEY', 'IwLGfDIpmfx3^$&2JX+zu gF|$76I<1@k?Q|[Y33I)j>cO}c/c^&U1Y<rr`yvq@5');
 
